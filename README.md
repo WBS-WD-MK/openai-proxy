@@ -52,32 +52,87 @@ const raw = JSON.stringify({
   messages: [
     {
       role: 'system',
-      content: 'You are a helpful assistant.'
+      content: 'You are a helpful assistant.',
     },
     {
       role: 'user',
-      content: 'Who won the world series in 2020?'
+      content: 'Who won the world series in 2020?',
     },
     {
       role: 'assistant',
-      content: 'The Los Angeles Dodgers won the World Series in 2020.'
+      content: 'The Los Angeles Dodgers won the World Series in 2020.',
     },
     {
       role: 'user',
-      content: 'Where was it played?'
-    }
-  ]
+      content: 'Where was it played?',
+    },
+  ],
 });
 
 const requestOptions = {
   method: 'POST',
   headers: myHeaders,
   body: raw,
-  redirect: 'follow'
+  redirect: 'follow',
 };
 
 fetch('http://localhost:5050/api/v1/chat/completions', requestOptions)
-  .then(response => response.text())
-  .then(result => console.log(result))
-  .catch(error => console.error(error));
+  .then((response) => response.text())
+  .then((result) => console.log(result))
+  .catch((error) => console.error(error));
+```
+
+## Dev mode with Ollama
+
+- Install [Ollama](https://ollama.com/)
+- run ollama
+- install a model
+
+```bash
+ollama run llama3
+```
+
+- run the proxy server
+- you will need to pass `ollama` as the provider in the header
+- you will need to pass `development` as the mode in the header
+- you will need to pass the model name in the body
+
+- example request
+
+```javascript
+const myHeaders = new Headers();
+myHeaders.append('provider', 'ollama');
+myHeaders.append('mode', 'development');
+myHeaders.append('Content-Type', 'application/json');
+const raw = JSON.stringify({
+  model: 'llama3',
+  messages: [
+    {
+      role: 'system',
+      content: 'You are a helpful assistant.',
+    },
+    {
+      role: 'user',
+      content: 'Who won the world series in 2020?',
+    },
+    {
+      role: 'assistant',
+      content: 'The Los Angeles Dodgers won the World Series in 2020.',
+    },
+    {
+      role: 'user',
+      content: 'Where was it played?',
+    },
+  ],
+});
+const requestOptions = {
+  method: 'POST',
+  headers: myHeaders,
+  body: raw,
+  redirect: 'follow',
+};
+fetch('http://localhost:5050/api/v1/chat/completions', requestOptions)
+  .then((response) => response.text())
+  .then((result) => console.log(result))
+  .catch((error) => console.error(error));
 ```
