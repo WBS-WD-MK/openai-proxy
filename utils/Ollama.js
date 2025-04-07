@@ -5,14 +5,14 @@ import ErrorResponse from './ErrorResponse.js';
 export default class Ollama {
   chat = {
     completions: {
-      async create({ messages, model, stream }) {
+      async create({ messages, model, stream, format }) {
         if (!model) throw new ErrorResponse('400 you must provide a model parameter', 400);
         if (!messages) throw new ErrorResponse("400 Missing required parameter: 'messages'", 400);
-
         const response = await ollama.chat({
-          model: model,
-          messages: messages,
-          stream: stream,
+          model,
+          messages,
+          stream,
+          format,
         });
 
         if (stream) {
